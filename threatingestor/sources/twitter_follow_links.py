@@ -10,7 +10,7 @@ from threatingestor.sources import Source
 
 TWEET_URL = 'https://twitter.com/{user}/status/{id}'
 
-WHITELIST_DOMAINS = r"pastebin\.com"
+WHITELIST_DOMAINS = r"(pastebin\.com|gist\.github\.com)"
 
 
 class Plugin(Source):
@@ -80,15 +80,19 @@ class Plugin(Source):
                 try:
                     tweet['content'] = tweet['content'].replace(url['url'], url['expanded_url'])
 
-                    # Check if pastebin.com in url
+                    # Check if pastebin.com or gist in url
                     if re.search(WHITELIST_DOMAINS, url['expanded_url']):
 
-                        # Check if the url is already returning the 'raw' pastebin. If not, update the url
-                        if 'raw' not in url['expanded_url']:
+                        # Pastebin
+                        if url['expanded_url'].startswith("https://pastebin.com/raw/"):
+                            location = url['expanded_url']
+                            pass
+                        elif url['expanded_url'].startswith("https://pastebin.com/"):
                             pastebin_id = re.search(r"pastebin.com/(.*?)$", url['expanded_url']).group(1)
                             location = f"https://pastebin.com/raw/{pastebin_id}"
-                        else:
-                            location = url['expanded_url']
+                        # Gist
+                        elif url['expanded_url'].startswith("https://gist.github.com/") and not 'raw' in url['expanded_url']:
+                            location = url['expanded_url'] + '/raw'
 
                         req = requests.get(location)
                         saved_state = tweet['id']

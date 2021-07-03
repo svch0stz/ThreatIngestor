@@ -24,9 +24,8 @@ class Plugin(Operator):
 
     def handle_artifact(self, artifact):
         """Operate on a single artifact."""
-        with open(time.strftime("%Y%m%d-")+self.filename, 'a+', encoding='utf-8', newline='') as f:
+        with open("__input_to_scan/"+time.strftime("%Y%m%d-")+self.filename, 'a+', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
             artifact_type = artifact.__class__.__name__
-            writer.writerow([str(artifact),artifact.source_name,
-                    artifact.reference_link])
+            writer.writerow([str(artifact)])
 

@@ -48,7 +48,7 @@ class Plugin(Source):
         # If no saved_state, search max 1 day ago.
         if not saved_state:
             saved_state = (datetime.datetime.utcnow() -
-                           datetime.timedelta(days=10)).isoformat()[:-7] + 'Z'
+                           datetime.timedelta(days=1)).isoformat()[:-7] + 'Z'
 
         params = {
             'q': "{search} created:>={timestamp}".format(

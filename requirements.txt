@@ -7,3 +7,4 @@ sgmllib3k
 loguru
 statsd
 requests
+twitter

@@ -34,7 +34,8 @@ class Plugin(Operator):
             query = f"""
                 CREATE TABLE IF NOT EXISTS `{type_name}` (
                     `artifact` TEXT PRIMARY KEY,
-                    `reference_link` TExT,
+                    `source` TEXT,
+                    `reference_link` TEXT,
                     `reference_text` TEXT,
                     `created_date` TEXT,
                     `state` TEXT
@@ -50,15 +51,17 @@ class Plugin(Operator):
         query = f"""
             INSERT OR IGNORE INTO `{type_name}` (
                 `artifact`,
+                `source`,
                 `reference_link`,
                 `reference_text`,
                 `created_date`,
                 `state`
             )
-            VALUES (?, ?, ?, datetime('now', 'utc'), NULL)
+            VALUES (?, ?, ?, ?, datetime('now', 'utc'), NULL)
         """
         self.cursor.execute(query, (
             str(artifact),
+            artifact.source_name,
             artifact.reference_link,
             artifact.reference_text
         ))
